@@ -12,7 +12,7 @@ import customers
 
 ### Från Customers.py
 #print("<<<MFA Reset V0.1>>>")
-
+#
 #masterkey = input("Master key?: ")
 #if masterkey != "SuperSecret":
 #    quit()
