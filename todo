@@ -1,0 +1,17 @@
+Att göra med MFA reset_
+
+* Formatera om koden så allt går i en consistent loop
+
+* Ta bort allt onödigt från customers.py så all kod körs från Main.py
+
+* Se på implementering av SMTP utskicket
+
+* Se över SMTP utskickets design
+
+* Lista upp fler företag i customers.py
+
+* Password management (input vid första start, logga user o lösen i .txt krypterat, checka efter .txt nästa start)
+
+* Lägga in hardcoded master key (framtiden köra med SQL)
+
+* Testing
