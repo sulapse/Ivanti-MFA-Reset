@@ -72,7 +72,14 @@ def PostLogin():
     if unlockresetinput == "unlock":
         unlockuser = browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]')
         unlockuser.click()
-        print("Success! Account has been unlocked.")
+        try:
+            unlockconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmUnlock"]')
+        except NoSuchElementException:
+            print("Only locked users can be unlocked!")
+        else:
+            unlockconfirm.click()
+            print("User unlocked")
+
     elif unlockresetinput == "reset":
         resetuser = browser.find_element(By.XPATH, '//*[@id="btnReset_49"]')
         resetuser.click()
