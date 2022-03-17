@@ -10,6 +10,7 @@ from prompt_toolkit.completion import WordCompleter
 import customers
 #import os
 
+#UNLOCK ACCOUNT BEKRÄFTAR ALDRIG UPPLÅSNINGEN, fixa.
 
 #inlogg och alternativ för webdriver
 myuser = "kesu"

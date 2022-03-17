@@ -8,7 +8,7 @@ print("<<<MFA Reset V0.1>>>")
 #    quit()
 
 
-cust_completer = WordCompleter(['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen'])
+cust_completer = WordCompleter(['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader'])
 foretaginput = prompt('Företag: ', completer=cust_completer)
 foretagurl = ""
 foretagotp = ""
@@ -50,6 +50,9 @@ elif foretaginput == "sarnmark":
 elif foretaginput == "energiforetagen":
     foretagurl = "https://ssl-energiforetagen.dcloud.se/admin"
     foretagotp = "Energiforetagen_TOTP"
+elif foretaginput == "kungalvsbostader":
+    foretagurl = "https://ssl-kungalvsbostader.dcloud.se/admin"
+    foretagotp = "Kungalv_TOTP"
 else:
     print("Invalid customer")
     quit()
