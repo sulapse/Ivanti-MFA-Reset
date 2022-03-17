@@ -1,12 +1,6 @@
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
-print("<<<MFA Reset V0.1>>>")
-
-#masterkey = input("Master key?: ")
-#if masterkey != "SuperSecret":
-#    quit()
-
 
 cust_completer = WordCompleter(['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader'])
 foretaginput = prompt('Företag: ', completer=cust_completer)

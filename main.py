@@ -10,7 +10,12 @@ from prompt_toolkit.completion import WordCompleter
 import customers
 #import os
 
-#UNLOCK ACCOUNT BEKRÄFTAR ALDRIG UPPLÅSNINGEN, fixa.
+### Från Customers.py
+#print("<<<MFA Reset V0.1>>>")
+
+#masterkey = input("Master key?: ")
+#if masterkey != "SuperSecret":
+#    quit()
 
 #inlogg och alternativ för webdriver
 myuser = "kesu"
@@ -21,8 +26,6 @@ options.add_experimental_option("excludeSwitches", ["enable-logging"])
 #os.environ['WDM_LOG_LEVEL'] = '0'
 
 ###Väljer driver och öppnar webbläsare med url från customers.py
-#browser = webdriver.Chrome('C:\chromedriver\chromedriver.exe', options=options)
-#browser.get(customers.foretagurl)
 service = ChromeService(executable_path=ChromeDriverManager().install())
 browser = webdriver.Chrome(service=service, options=options)
 browser.get(customers.foretagurl)
