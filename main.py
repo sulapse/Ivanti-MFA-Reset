@@ -8,35 +8,30 @@ from selenium.common.exceptions import NoSuchElementException
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 import customers
-#import os
 
-### Från Customers.py
-#print("<<<MFA Reset V0.1>>>")
-#
-#masterkey = input("Master key?: ")
-#if masterkey != "SuperSecret":
-#    quit()
-
-#inlogg och alternativ för webdriver
+# import os
+###User details
 myuser = "kesu"
 mypass = "a0bTxT123Myh41k2o"
+
+###alternativ för webdriver
 options = Options()
-#options.add_argument('--headless')
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
-#os.environ['WDM_LOG_LEVEL'] = '0'
+# options.add_argument('--headless')
+options.add_experimental_option("excludeSwitches", ["enable-logging"])
+# os.environ['WDM_LOG_LEVEL'] = '0'
+service = ChromeService(executable_path=ChromeDriverManager().install())
+
 
 ###Väljer driver och öppnar webbläsare med url från customers.py
-service = ChromeService(executable_path=ChromeDriverManager().install())
 browser = webdriver.Chrome(service=service, options=options)
 browser.get(customers.foretagurl)
 
 
-#PostLogin hanterar allt från "startsidan" efter lyckad inloggning. I.e välja auth server, och navigera till listan över users.
-#PostLogin innehåller också hantering av autocomplete för användarnamnen
+###PostLogin hanterar allt från "startsidan" efter lyckad inloggning. I.e välja auth server, och navigera till listan över users.
+###PostLogin innehåller också hantering av autocomplete för användarnamnen
 def PostLogin():
-
-    authservers = browser.find_element(By.XPATH,
-                                       '/html/body/table[5]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr[6]/td/table/tbody/tr/td[2]/a')
+    authservers = browser.find_element(By.XPATH, '/html/body/table[5]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr[6]/td/table/tbody/tr/td[2]/a')
     authservers.click()
 
     totpselect = browser.find_element(By.LINK_TEXT, customers.foretagotp)
@@ -59,18 +54,15 @@ def PostLogin():
         col = row.find_element(By.XPATH, 'td[2]')
         userslist.append(col.text)
 
-    #print(userslist)
+    # print(userslist)
     userlistcompleter = WordCompleter(userslist)
     customer = prompt('Användarnamn?: ', completer=userlistcompleter)
-
 
     customersel = browser.find_element(By.ID, customer + ":" + rubrik)
     customersel.click()
 
     unlockresetcomplete = WordCompleter(['unlock', 'reset'])
     unlockresetinput = prompt('unlock / reset? ', completer=unlockresetcomplete)
-
-
 
     if unlockresetinput == "unlock":
         unlockuser = browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]')
@@ -91,14 +83,14 @@ def PostLogin():
         print("Success! Account has been reset.")
 
 
-#Om aktiv session redan finns klickar på continue
+###Om aktiv session redan finns klickar på continue
 def continueses():
     btncheck = browser.find_element(By.NAME, 'btnContinue')
     btncheck.click()
     checknewUI()
 
 
-#Byter till klassiska UI om det inte redan finns en aktiv session
+###Byter till klassiska UI om det inte redan finns en aktiv session
 def changefromnewUI():
     newnavbar = browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/a')
     newnavbar.click()
@@ -107,7 +99,7 @@ def changefromnewUI():
     PostLogin()
 
 
-#Gör en check om nuvarande UI är nya eller klassiska
+###Gör en check om nuvarande UI är nya eller klassiska
 def checknewUI():
     try:
         browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/a')
@@ -119,13 +111,13 @@ def checknewUI():
         changefromnewUI()
 
 
-#Skriver in user och pass samt loggar in på loginsidan
+###Skriver in user och pass samt loggar in på loginsidan
 loginuser = browser.find_element(By.XPATH, '//*[@id="username"]')
 loginpass = browser.find_element(By.XPATH, '//*[@id="password"]')
 loginuser.send_keys(myuser)
 loginpass.send_keys(mypass + Keys.ENTER)
 
-#Gör check om det redan finns en aktiv session
+###Gör check om det redan finns en aktiv session
 try:
     browser.find_element(By.NAME, 'btnContinue')
 except NoSuchElementException:
