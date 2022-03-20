@@ -1,3 +1,4 @@
+import time
 from importlib import reload
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -29,7 +30,8 @@ if __name__ == '__main__':
         if masterkey != "lol":
             quit()
         else:
-            VeryBeginning()
+            CheckFileExist()
+
 
 
     def VeryBeginning():
@@ -138,5 +140,20 @@ if __name__ == '__main__':
             print("else")
             continueses()
 
+
+    def CheckFileExist():
+        try:
+            logintxt = open("login.txt", "r")
+        except FileNotFoundError:
+            pulsemail = input("Pulse Mail: ")
+            pulsepass = input("Pule Pass: ")
+            logintxt = open("login.txt", "w")
+            logintxt.write(pulsemail + ":" + pulsepass)
+        else:
+            f = (logintxt.read().split(':'))
+            time.sleep(2)
+            print(f[0])
+            print(f[1])
+            VeryBeginning()
 
     LegitCheck()
