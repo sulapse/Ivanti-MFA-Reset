@@ -15,3 +15,9 @@ Att göra med MFA reset_
 * Lägga in hardcoded master key (framtiden köra med SQL)
 
 * Testing
+
+
+N0TES_
+
+Loopa programmet -> Bygga ihop ett näste av Functions
+

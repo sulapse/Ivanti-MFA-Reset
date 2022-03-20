@@ -1,6 +1,7 @@
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
+
 print("<<<MFA Reset V0.1>>>")
 #masterkey = input("Master key?: ")
 # if masterkey != "SuperSecret":
