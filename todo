@@ -1,7 +1,5 @@
 Att göra med MFA reset_
 
-* Ta bort allt onödigt från customers.py så all kod körs från Main.py
-
 * Se på implementering av SMTP utskicket
 
 * Se över SMTP utskickets design
