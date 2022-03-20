@@ -1,4 +1,5 @@
 import time
+import hashlib
 from importlib import reload
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
