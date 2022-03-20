@@ -144,12 +144,14 @@ if __name__ == '__main__':
 
     def CheckFileExist():
         try:
-            logintxt = open("login.txt", "r")
+            logintxt = open("mykey.key", "r")
         except FileNotFoundError:
-            pulsemail = input("Pulse Mail: ")
-            pulsepass = input("Pule Pass: ")
-            logintxt = open("login.txt", "w")
-            logintxt.write(pulsemail + ":" + pulsepass)
+            import rsa
+            publicKey, privateKey = rsa.newkeys(512)
+            usrmail = input("Pulse Mail: ")
+            usrpass = input("Pulse Pass: ")
+
+
         else:
             f = (logintxt.read().split(':'))
             time.sleep(2)
