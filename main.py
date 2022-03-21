@@ -13,7 +13,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 import os
 
-###User details (Ska bytas ut mot password management)
+##User details (Ska bytas ut mot password management)
 myuser = "kesu"
 mypass = "a0bTxT123Myh41k2o"
 
