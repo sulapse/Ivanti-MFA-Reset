@@ -42,6 +42,10 @@ if __name__ == '__main__':
             mypass = getpass("Pulse Password: ")
             if mypass != '':
                 break
+        #try:
+        # någotelement för att se om lösen är fel
+            #else:
+                #checka om användaren blev inloggad ja? gå vidare, nej? shiiiiettt.
         VeryBeginning(myuser, mypass)
         return mypass, myuser
 

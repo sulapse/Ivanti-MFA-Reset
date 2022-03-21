@@ -1,11 +1,14 @@
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
-import main
-
-cust_completer = WordCompleter(
-    ['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader'])
+valid_cust = ['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader']
+cust_completer = WordCompleter(['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader'])
 foretaginput = prompt('Företag_cust: ', completer=cust_completer)
+
+
+while foretaginput not in valid_cust:
+    print("Sorry, kunden finns ej - Försök igen.")
+    foretaginput = prompt('Företag_cust: ', completer=cust_completer)
 
 # Lista över företag, deras URL och länknamn för TOTP på pulse admin sidan.
 if foretaginput == "sigtunahem":
@@ -47,7 +50,3 @@ elif foretaginput == "energiforetagen":
 elif foretaginput == "kungalvsbostader":
     foretagurl = "https://ssl-kungalvsbostader.dcloud.se/admin"
     foretagotp = "Kungalv_TOTP"
-else:
-    print("Kunden finns ej, försök igen!")
-    input("Klicka ENTER för att börja om..")
-    main.VeryBeginning()
