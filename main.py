@@ -1,4 +1,5 @@
 import time
+from stdiomask import getpass
 import hashlib
 from importlib import reload
 from selenium import webdriver
@@ -32,7 +33,6 @@ if __name__ == '__main__':
             quit()
         else:
             CheckFileExist()
-
 
 
     def VeryBeginning():
@@ -144,19 +144,42 @@ if __name__ == '__main__':
 
     def CheckFileExist():
         try:
-            logintxt = open("mykey.key", "r")
+            open('userInfo.txt', 'r')
         except FileNotFoundError:
-            import rsa
-            publicKey, privateKey = rsa.newkeys(512)
-            usrmail = input("Pulse Mail: ")
-            usrpass = input("Pulse Pass: ")
-
-
+            FileNotExist()
         else:
-            f = (logintxt.read().split(':'))
-            time.sleep(2)
-            print(f[0])
-            print(f[1])
+            print("Filen finns redan!")
             VeryBeginning()
+
+    # Registrerar inloggningsuppgifterna för adminpanelen
+    def FileNotExist():
+
+        while True:
+            userName = input("Pulse Email: ").title()
+            if userName != '':
+                break
+        userName = sanitizeName(userName)
+        while True:
+            userPassword = getpass("Pulse Password: ")
+            if userPassword != '':
+                break
+
+        addUserInfo([userName, hash_password(userPassword)])
+
+    # Skapar userinfo.txt och lägger in inloggningsinformationen från FileNotExist()
+    def addUserInfo(userInfo: list):
+        with open('userInfo.txt', 'x') as file:
+            for info in userInfo:
+                file.write(info)
+                file.write('\n')
+
+
+    def hash_password(password):
+        return hashlib.sha256(str.encode(password)).hexdigest()
+
+
+    def check_password_hash(password, hash):
+        return hash_password(password) == hash
+
 
     LegitCheck()
