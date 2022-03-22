@@ -106,7 +106,6 @@ if __name__ == '__main__':
                 resetconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]')
                 resetconfirm.click()
                 print("Success! Account has been reset.")
-                import mail.py
 
             browser.close()
             reload(customers)
