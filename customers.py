@@ -1,6 +1,8 @@
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
+import main
+
 cust_completer = WordCompleter(
     ['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader'])
 foretaginput = prompt('Företag_cust: ', completer=cust_completer)
@@ -48,4 +50,4 @@ elif foretaginput == "kungalvsbostader":
 else:
     print("Kunden finns ej, försök igen!")
     input("Klicka ENTER för att börja om..")
-    quit()
+    main.VeryBeginning()

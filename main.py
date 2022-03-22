@@ -1,4 +1,3 @@
-import time
 from stdiomask import getpass
 import hashlib
 from importlib import reload
