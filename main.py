@@ -1,5 +1,5 @@
 from stdiomask import getpass
-import hashlib
+import time
 from importlib import reload
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -12,27 +12,38 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 import os
 
-##User details (Ska bytas ut mot password management)
-myuser = "kesu"
-mypass = "a0bTxT123Myh41k2o"
-
-###alternativ för webdriver
-options = Options()
-options.add_experimental_option("excludeSwitches", ["enable-logging"])
-# options.add_argument('--headless')
-options.add_experimental_option("excludeSwitches", ["enable-logging"])
-os.environ['WDM_LOG_LEVEL'] = '0'
-service = ChromeService(executable_path=ChromeDriverManager().install())
 
 if __name__ == '__main__':
+    ###alternativ för webdriver
+    options = Options()
+    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    #options.add_argument('--headless')
+    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    os.environ['WDM_LOG_LEVEL'] = '0'
+    service = ChromeService(executable_path=ChromeDriverManager().install())
+
+
     def LegitCheck():
         print("<<<MFA Reset V0.1>>>")
         masterkey = input("Master key?: ")
         if masterkey != "lol":
             quit()
         else:
-            CheckFileExist()
+            print("")
+            LoginUser()
+        LegitCheck()
 
+    def LoginUser():
+        while True:
+            myuser = input("Pulse Username: ").title()
+            if myuser != '':
+                break
+        while True:
+            mypass = getpass("Pulse Password: ")
+            if mypass != '':
+                break
+        return myuser, mypass
+        VeryBeginning()
 
     def VeryBeginning():
         import customers
@@ -124,6 +135,7 @@ if __name__ == '__main__':
                 print("New UI")
                 changefromnewUI()
 
+
         ###Skriver in user och pass samt loggar in på loginsidan
         loginuser = browser.find_element(By.XPATH, '//*[@id="username"]')
         loginpass = browser.find_element(By.XPATH, '//*[@id="password"]')
@@ -139,46 +151,6 @@ if __name__ == '__main__':
         else:
             print("else")
             continueses()
-
-
-    def CheckFileExist():
-        try:
-            open('userInfo.txt', 'r')
-        except FileNotFoundError:
-            FileNotExist()
-        else:
-            print("Filen finns redan!")
-            VeryBeginning()
-
-    # Registrerar inloggningsuppgifterna för adminpanelen
-    def FileNotExist():
-
-        while True:
-            userName = input("Pulse Email: ").title()
-            if userName != '':
-                break
-        userName = sanitizeName(userName)
-        while True:
-            userPassword = getpass("Pulse Password: ")
-            if userPassword != '':
-                break
-
-        addUserInfo([userName, hash_password(userPassword)])
-
-    # Skapar userinfo.txt och lägger in inloggningsinformationen från FileNotExist()
-    def addUserInfo(userInfo: list):
-        with open('userInfo.txt', 'x') as file:
-            for info in userInfo:
-                file.write(info)
-                file.write('\n')
-
-
-    def hash_password(password):
-        return hashlib.sha256(str.encode(password)).hexdigest()
-
-
-    def check_password_hash(password, hash):
-        return hash_password(password) == hash
 
 
     LegitCheck()
