@@ -29,7 +29,7 @@ if __name__ == '__main__':
         if masterkey != "lol":
             quit()
         else:
-            print("")
+            print("MASTER OK")
             LoginUser()
         LegitCheck()
 
@@ -42,10 +42,11 @@ if __name__ == '__main__':
             mypass = getpass("Pulse Password: ")
             if mypass != '':
                 break
-        return myuser, mypass
-        VeryBeginning()
+        VeryBeginning(myuser, mypass)
+        return mypass, myuser
 
-    def VeryBeginning():
+
+    def VeryBeginning(myuser, mypass):
         import customers
         ###Väljer driver och öppnar webbläsare med url från customers.py
         browser = webdriver.Chrome(service=service, options=options)
@@ -108,7 +109,7 @@ if __name__ == '__main__':
 
             browser.close()
             reload(customers)
-            VeryBeginning()
+            VeryBeginning(myuser, mypass)
 
         ###Om aktiv session redan finns klickar på continue
         def continueses():
