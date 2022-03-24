@@ -3,12 +3,12 @@ from prompt_toolkit.completion import WordCompleter
 
 valid_cust = ['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader']
 cust_completer = WordCompleter(['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader'])
-foretaginput = prompt('Företag_cust: ', completer=cust_completer)
+foretaginput = prompt('Företag: ', completer=cust_completer)
 
 
 while foretaginput not in valid_cust:
-    print("Sorry, kunden finns ej - Försök igen.")
-    foretaginput = prompt('Företag_cust: ', completer=cust_completer)
+    print("Kunden finns ej, Försök igen.")
+    foretaginput = prompt('Företag: ', completer=cust_completer)
 
 # Lista över företag, deras URL och länknamn för TOTP på pulse admin sidan.
 if foretaginput == "sigtunahem":

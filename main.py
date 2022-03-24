@@ -1,4 +1,5 @@
 from stdiomask import getpass
+import time
 from importlib import reload
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -17,20 +18,20 @@ if __name__ == '__main__':
     options = Options()
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #options.add_argument('--headless')
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
     os.environ['WDM_LOG_LEVEL'] = '0'
     service = ChromeService(executable_path=ChromeDriverManager().install())
 
 
     def LegitCheck():
         print("<<<MFA Reset V0.1>>>")
-        masterkey = getpass("Master key?: ")
-        if masterkey != "lol":
-            quit()
-        else:
-            print("MASTER OK")
-            LoginUser()
-        LegitCheck()
+        while True:
+            masterkey = getpass("Master key?: ")
+            if masterkey == "lol":
+                print("MASTER OK")
+                LoginUser()
+            else:
+                print("Ehh fel.. Ska du ens ha tillgång?")
+
 
     def LoginUser():
         while True:
@@ -41,12 +42,28 @@ if __name__ == '__main__':
             mypass = getpass("Pulse Password: ")
             if mypass != '':
                 break
-        #try:
-        # någotelement för att se om lösen är fel
-            #else:
-                #checka om användaren blev inloggad ja? gå vidare, nej? shiiiiettt.
-        VeryBeginning(myuser, mypass)
-        return mypass, myuser
+        testlogin = webdriver.Chrome(service=service, options=options)
+        testlogin.get("https://ssl-structor.dcloud.se/admin")
+        testloguser = testlogin.find_element(By.XPATH, '//*[@id="username"]')
+        testlogpass = testlogin.find_element(By.XPATH, '//*[@id="password"]')
+        testloguser.send_keys(myuser)
+        testlogpass.send_keys(mypass + Keys.ENTER)
+        try:
+            testlogin.find_element(By.XPATH, '//*[@id="table_LoginPage_5"]/tbody/tr[1]/td')
+        except NoSuchElementException:
+            if testlogin.current_url == "https://ssl-structor.dcloud.se/dana-admin/misc/dashboard.cgi" or testlogin.current_url == "https://ssl-structor.dcloud.se/dana-na/auth/url_admin/welcome.cgi?p=admin%2Dconfirm":
+                print("OK")
+                testlogin.close()
+                VeryBeginning(myuser, mypass)
+                return mypass, myuser
+            else:
+                print("Fel användarnamn eller lösenord, försök igen.")
+                testlogin.close()
+                LoginUser()
+        else:
+            print("Fel användarnamn eller lösenord, försök igen.")
+            testlogin.close()
+            LoginUser()
 
 
     def VeryBeginning(myuser, mypass):
@@ -69,7 +86,7 @@ if __name__ == '__main__':
             userselect.click()
 
             rubrik = browser.find_element(By.CLASS_NAME, 'cssPgTitle').text
-            print(rubrik)
+            print("Laddar fortfarande, chilla lite.")
 
             showxusers = browser.find_element(By.XPATH, '//*[@id="matchCount_6"]')
             showxusers.clear()
@@ -86,29 +103,37 @@ if __name__ == '__main__':
             userlistcompleter = WordCompleter(userslist)
             customer = prompt('Användarnamn?: ', completer=userlistcompleter)
 
+            while customer not in userslist:
+                print("Användaren finns ej, försök igen.")
+                customer = prompt('Användarnamn?: ', completer=userlistcompleter)
+
             customersel = browser.find_element(By.ID, customer + ":" + rubrik)
             customersel.click()
 
             unlockresetcomplete = WordCompleter(['unlock', 'reset'])
-            unlockresetinput = prompt('unlock / reset? ', completer=unlockresetcomplete)
+            while True:
+                unlockresetinput = prompt('unlock / reset? ', completer=unlockresetcomplete)
+                if unlockresetinput == "unlock":
+                    unlockuser = browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]')
+                    unlockuser.click()
+                    try:
+                        unlockconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmUnlock"]')
+                    except NoSuchElementException:
+                        print("Only locked users can be unlocked!")
+                        break
+                    else:
+                        unlockconfirm.click()
+                        print("User unlocked!")
+                        break
 
-            if unlockresetinput == "unlock":
-                unlockuser = browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]')
-                unlockuser.click()
-                try:
-                    unlockconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmUnlock"]')
-                except NoSuchElementException:
-                    print("Only locked users can be unlocked!")
-                else:
-                    unlockconfirm.click()
-                    print("User unlocked")
 
-            elif unlockresetinput == "reset":
-                resetuser = browser.find_element(By.XPATH, '//*[@id="btnReset_49"]')
-                resetuser.click()
-                resetconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]')
-                resetconfirm.click()
-                print("Success! Account has been reset.")
+                elif unlockresetinput == "reset":
+                    resetuser = browser.find_element(By.XPATH, '//*[@id="btnReset_49"]')
+                    resetuser.click()
+                    resetconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]')
+                    resetconfirm.click()
+                    print("Success! Account has been reset.")
+                    break
 
             browser.close()
             reload(customers)
@@ -133,10 +158,8 @@ if __name__ == '__main__':
             try:
                 browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/a')
             except NoSuchElementException:
-                print("Not new UI")
                 PostLogin()
             else:
-                print("New UI")
                 changefromnewUI()
 
 
@@ -150,10 +173,8 @@ if __name__ == '__main__':
         try:
             browser.find_element(By.NAME, 'btnContinue')
         except NoSuchElementException:
-            print("except")
             PostLogin()
         else:
-            print("else")
             continueses()
 
 
