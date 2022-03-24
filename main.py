@@ -1,5 +1,4 @@
 from stdiomask import getpass
-import time
 from importlib import reload
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -25,7 +24,7 @@ if __name__ == '__main__':
 
     def LegitCheck():
         print("<<<MFA Reset V0.1>>>")
-        masterkey = input("Master key?: ")
+        masterkey = getpass("Master key?: ")
         if masterkey != "lol":
             quit()
         else:
