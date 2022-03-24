@@ -2,3 +2,6 @@
 /.idea/
 /login.txt
 /mykey.key
+/dist/
+/build/
+/main.spec

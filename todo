@@ -6,15 +6,9 @@ Att göra med MFA reset_
 
 * Lista upp fler företag i customers.py
 
-* Password management (input vid första start, logga user o lösen i .txt krypterat, checka efter .txt nästa start)
-
 * Testing
 
 *Uppgradera master key till SQL
 
 *Uppgradera customer list till SQL
-
-N0TES_
-
-Loopa programmet -> Bygga ihop ett näste av Functions
 
