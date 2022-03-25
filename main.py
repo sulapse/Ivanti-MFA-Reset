@@ -13,6 +13,7 @@ import os
 
 
 if __name__ == '__main__':
+    print("<<<MFA Reset V0.1>>>")
     ###alternativ för webdriver
     options = Options()
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
@@ -22,7 +23,6 @@ if __name__ == '__main__':
 
 
     def LegitCheck():
-        print("<<<MFA Reset V0.1>>>")
         while True:
             masterkey = getpass("Master key?: ")
             if masterkey == "lol":
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             userselect.click()
 
             rubrik = browser.find_element(By.CLASS_NAME, 'cssPgTitle').text
-            print("Laddar fortfarande, chilla lite.")
+            print("Laddar fortfarande, chilla lite")
 
             showxusers = browser.find_element(By.XPATH, '//*[@id="matchCount_6"]')
             showxusers.clear()
