@@ -50,3 +50,6 @@ elif foretaginput == "energiforetagen":
 elif foretaginput == "kungalvsbostader":
     foretagurl = "https://ssl-kungalvsbostader.dcloud.se/admin"
     foretagotp = "Kungalv_TOTP"
+elif foretaginput == "srat":
+    foretagurl = "https://ssl-sverigesingenjorer.dcloud.se/admin"
+    foretagotp = "SRAT-TOTP"
