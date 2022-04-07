@@ -18,7 +18,7 @@ if __name__ == '__main__':
     ###alternativ för webdriver
     options = Options()
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    #options.add_argument('--headless')
+    options.add_argument('--headless')
     os.environ['WDM_LOG_LEVEL'] = '0'
     service = ChromeService(executable_path=ChromeDriverManager().install())
 
