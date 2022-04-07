@@ -11,6 +11,7 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 import os
 
+clear = "\n" * 100
 
 if __name__ == '__main__':
     print("<<<MFA Reset V0.1>>>")
@@ -20,16 +21,6 @@ if __name__ == '__main__':
     #options.add_argument('--headless')
     os.environ['WDM_LOG_LEVEL'] = '0'
     service = ChromeService(executable_path=ChromeDriverManager().install())
-
-
-    def LegitCheck():
-        while True:
-            masterkey = getpass("Master key?: ")
-            if masterkey == "lol":
-                print("MASTER OK")
-                LoginUser()
-            else:
-                print("Ehh fel.. Ska du ens ha tillgång?")
 
 
     def LoginUser():
@@ -51,15 +42,18 @@ if __name__ == '__main__':
             testlogin.find_element(By.XPATH, '//*[@id="table_LoginPage_5"]/tbody/tr[1]/td')
         except NoSuchElementException:
             if testlogin.current_url == "https://ssl-structor.dcloud.se/dana-admin/misc/dashboard.cgi" or testlogin.current_url == "https://ssl-structor.dcloud.se/dana-na/auth/url_admin/welcome.cgi?p=admin%2Dconfirm":
-                print("OK")
+                print(clear)
+                print("[Inlogg OK]")
                 testlogin.close()
                 VeryBeginning(myuser, mypass)
                 return mypass, myuser
             else:
+                print(clear)
                 print("Fel användarnamn eller lösenord, försök igen.")
                 testlogin.close()
                 LoginUser()
         else:
+            print(clear)
             print("Fel användarnamn eller lösenord, försök igen.")
             testlogin.close()
             LoginUser()
@@ -85,6 +79,7 @@ if __name__ == '__main__':
             userselect.click()
 
             rubrik = browser.find_element(By.CLASS_NAME, 'cssPgTitle').text
+            print(clear)
             print("Laddar fortfarande, chilla lite")
 
             showxusers = browser.find_element(By.XPATH, '//*[@id="matchCount_6"]')
@@ -99,12 +94,30 @@ if __name__ == '__main__':
                 userslist.append(col.text)
 
             # print(userslist)
+            print(clear)
+            print("[Lämna användarnamn blankt och klicka ENTER för att återgå till välja företag]")
             userlistcompleter = WordCompleter(userslist)
             customer = prompt('Användarnamn?: ', completer=userlistcompleter)
 
-            while customer not in userslist:
-                print("Användaren finns ej, försök igen.")
-                customer = prompt('Användarnamn?: ', completer=userlistcompleter)
+            if customer == '':
+                print(clear)
+                browser.close()
+                reload(customers)
+                VeryBeginning(myuser, mypass)
+            else:
+                while customer not in userslist:
+                    print(clear)
+                    print("Användaren finns ej, försök igen.")
+                    customer = prompt('Användarnamn?: ', completer=userlistcompleter)
+                    if customer == '':
+                        print(clear)
+                        browser.close()
+                        reload(customers)
+                        VeryBeginning(myuser, mypass)
+
+            #while customer not in userslist:
+            #    print("Användaren finns ej, försök igen.")
+            #    customer = prompt('Användarnamn?: ', completer=userlistcompleter)
 
             customersel = browser.find_element(By.ID, customer + ":" + rubrik)
             customersel.click()
@@ -118,10 +131,12 @@ if __name__ == '__main__':
                     try:
                         unlockconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmUnlock"]')
                     except NoSuchElementException:
+                        print(clear)
                         print("Only locked users can be unlocked!")
                         break
                     else:
                         unlockconfirm.click()
+                        print(clear)
                         print("User unlocked!")
                         break
 
@@ -131,6 +146,7 @@ if __name__ == '__main__':
                     resetuser.click()
                     resetconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]')
                     resetconfirm.click()
+                    print(clear)
                     print("Success! Account has been reset.")
                     break
 
@@ -177,5 +193,5 @@ if __name__ == '__main__':
             continueses()
 
 
-    LegitCheck()
+    LoginUser()
     
