@@ -115,9 +115,6 @@ if __name__ == '__main__':
                         reload(customers)
                         VeryBeginning(myuser, mypass)
 
-            #while customer not in userslist:
-            #    print("Användaren finns ej, försök igen.")
-            #    customer = prompt('Användarnamn?: ', completer=userlistcompleter)
 
             customersel = browser.find_element(By.ID, customer + ":" + rubrik)
             customersel.click()
