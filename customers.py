@@ -1,8 +1,8 @@
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
-valid_cust = ['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader', 'srat', 'nordlo_stockholm_city']
-cust_completer = WordCompleter(['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader', 'srat', 'nordlo_stockholm_city'])
+valid_cust = ['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader', 'srat', 'nordlo_stockholm_city', 'norstedts']
+cust_completer = WordCompleter(['besqab', 'sigtunahem', 'structor', 'akademikerförbundet', 'swedish_stirling', 'nordia', 'bengtdahlgren_gbg', 'bengtdahlgren_br', 'aaro', 'kinnevik', 'sarnmark', 'energiforetagen', 'kungalvsbostader', 'srat', 'nordlo_stockholm_city', 'norstedts'])
 foretaginput = prompt('Företag: ', completer=cust_completer)
 
 
@@ -56,3 +56,6 @@ elif foretaginput == "srat":
 elif foretaginput == "nordlo_stockholm_city":
     foretagurl = "https://ssl.dicom.se/admin"
     foretagotp = "Dicom_TOTP"
+elif foretaginput == "norstedts":
+    foretagurl = "https://ssl-norstedts.dcloud.se/admin"
+    foretagotp = "Norstedts_TOTP"
