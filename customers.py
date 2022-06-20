@@ -62,3 +62,5 @@ elif foretaginput == "norstedts":
 elif foretaginput == "skandia":
     foretagurl = "https://ssl-skandiafastigheter.dcloud.se/admin"
     foretagotp = "Skandia-TOTP"
+else
+    print("lol")
