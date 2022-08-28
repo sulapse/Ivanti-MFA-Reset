@@ -1,3 +1,4 @@
+from turtle import clear
 from stdiomask import getpass
 from importlib import reload
 from selenium import webdriver
@@ -7,81 +8,86 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
+import os
+import logging
+import time
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
-import os
 
-clear = "\n" * 100
 
+#Funktion för att tömma konsollen och printa programmets titel
+def clearall():
+    clear = lambda: os.system('cls' if os.name == 'nt' else 'clear')
+    clear()
+    print("<<< MFA Reset V1.0 >>>")
+
+#Vid start av skriptet stängs loggar av och definierar samt kör browser med options
 if __name__ == '__main__':
-    print("<<<MFA Reset V0.1>>>")
+    os.environ['WDM_LOG'] = str(logging.NOTSET)
+    os.environ['WDM_LOG_LEVEL'] = '0'
     ###alternativ för webdriver
     options = Options()
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    options.add_argument('--headless')
-    os.environ['WDM_LOG_LEVEL'] = '0'
+    #options.add_argument('--headless')
     service = ChromeService(executable_path=ChromeDriverManager().install())
 
-
-    def LoginUser():
+###PulsePWCheck gör ett inloggningsförsök i Pulse för Structor
+###Om inlogg lyckas hoppar skriptet vidare till VeryBeginning()
+    def PulsePWCheck():
+        clearall()
+        testlogin = webdriver.Chrome(service=service, options=options)
+        testlogin.get("https://ssl-structor.dcloud.se/admin")
+        print("[Skriv in dina admin uppgifter för Pulse Secure]")
         while True:
-            myuser = input("Pulse Username: ").title()
+            clearall()
+            myuser = input("Användarnamn: ")
             if myuser != '':
                 break
         while True:
-            mypass = getpass("Pulse Password: ")
+            clearall()
+            mypass = getpass("Lösenord: ")
             if mypass != '':
                 break
-        testlogin = webdriver.Chrome(service=service, options=options)
-        testlogin.get("https://ssl-structor.dcloud.se/admin")
-        testloguser = testlogin.find_element(By.XPATH, '//*[@id="username"]')
-        testlogpass = testlogin.find_element(By.XPATH, '//*[@id="password"]')
-        testloguser.send_keys(myuser)
-        testlogpass.send_keys(mypass + Keys.ENTER)
+
+        testlogin.find_element(By.XPATH, '//*[@id="username"]').send_keys(myuser)
+        testlogin.find_element(By.XPATH, '//*[@id="password"]').send_keys(mypass + Keys.ENTER)
         try:
             testlogin.find_element(By.XPATH, '//*[@id="table_LoginPage_5"]/tbody/tr[1]/td')
         except NoSuchElementException:
             if testlogin.current_url == "https://ssl-structor.dcloud.se/dana-admin/misc/dashboard.cgi" or testlogin.current_url == "https://ssl-structor.dcloud.se/dana-na/auth/url_admin/welcome.cgi?p=admin%2Dconfirm":
-                print(clear)
+                clearall()
                 print("[Inlogg OK]")
                 testlogin.close()
                 VeryBeginning(myuser, mypass)
-                return mypass, myuser
             else:
-                print(clear)
+                clearall()
                 print("Fel användarnamn eller lösenord, försök igen.")
                 testlogin.close()
-                LoginUser()
+                PulsePWCheck()
         else:
-            print(clear)
+            clearall()
             print("Fel användarnamn eller lösenord, försök igen.")
             testlogin.close()
-            LoginUser()
+            PulsePWCheck()
 
 
+##VeryBeginning startar bara ny browser och tillåter skriptet att loopa
+##Ansluter till MySQL för att hämta användarna och företagens URLer mm mha customers.py
+##Efter navigering till URL, kör checknewui, changefromnewUI, continueses
     def VeryBeginning(myuser, mypass):
         import customers
+        clearall()
+        print("Letar efter sågspån..")
         ###Väljer driver och öppnar webbläsare med url från customers.py
         browser = webdriver.Chrome(service=service, options=options)
-        browser.get(customers.foretagurl)
+        browser.get(customers.admUrl[0])
 
         ###PostLogin hanterar allt från "startsidan" efter lyckad inloggning. I.e välja auth server, och navigera till listan över users.
         ###PostLogin innehåller också hantering av autocomplete för användarnamnen
         def PostLogin():
-            authservers = browser.find_element(By.XPATH,
-                                               '/html/body/table[5]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr[5]/td/table/tbody/tr[6]/td/table/tbody/tr/td[2]/a')
-            authservers.click()
-
-            totpselect = browser.find_element(By.LINK_TEXT, customers.foretagotp)
-            totpselect.click()
-            userselect = browser.find_element(By.XPATH,
-                                              '/html/body/table[5]/tbody/tr[2]/td[3]/form/table[3]/tbody/tr[1]/td/table/tbody/tr[1]/td[3]/table/tbody/tr/td/a')
-            userselect.click()
-
-            rubrik = browser.find_element(By.CLASS_NAME, 'cssPgTitle').text
-            print(clear)
-            print("Laddar fortfarande, chilla lite")
-
+            browser.get(customers.custTotp[0])
+            clearall()
+            print("Laddar användarna..")
             showxusers = browser.find_element(By.XPATH, '//*[@id="matchCount_6"]')
             showxusers.clear()
             showxusers.send_keys('69420' + Keys.ENTER)
@@ -94,78 +100,92 @@ if __name__ == '__main__':
                 userslist.append(col.text)
 
             # print(userslist)
-            print(clear)
+            clearall()
+            print("Pulse Secure användarinlogg: " + customers.userUrl)
             print("[Lämna användarnamn blankt och klicka ENTER för att återgå till välja företag]")
             userlistcompleter = WordCompleter(userslist)
             customer = prompt('Användarnamn?: ', completer=userlistcompleter)
 
             if customer == '':
-                print(clear)
+                clearall()
                 browser.close()
                 reload(customers)
                 VeryBeginning(myuser, mypass)
             else:
                 while customer not in userslist:
-                    print(clear)
-                    print("Användaren finns ej, försök igen.")
+                    clearall()
+                    print("Pulse Secure användarinlogg: " + customers.userUrl)
+                    print("Användaren kan ej hittas, försök igen.")
                     customer = prompt('Användarnamn?: ', completer=userlistcompleter)
                     if customer == '':
-                        print(clear)
+                        clearall()
                         browser.close()
                         reload(customers)
                         VeryBeginning(myuser, mypass)
 
+            #Klickar på användarens checkbox i Pulse
+            browser.find_element(By.XPATH, "//input[contains(@id,'{}')]".format(str(customer))).click()
 
-            customersel = browser.find_element(By.ID, customer + ":" + rubrik)
-            customersel.click()
-
+            #Ger användaren valet att låsa upp eller återställa kontot som blivit valt
+            print("Pulse Secure användarinlogg: " + customers.userUrl)
             unlockresetcomplete = WordCompleter(['unlock', 'reset'])
+
+            #Loopar till användaren valt lås upp eller lås upp
             while True:
-                unlockresetinput = prompt('unlock / reset? ', completer=unlockresetcomplete)
+                clearall()
+                print("Pulse Secure användarinlogg: " + customers.userUrl)
+                print("Vald användare:", customer)
+                unlockresetinput = prompt('unlock / reset: ', completer=unlockresetcomplete)
                 if unlockresetinput == "unlock":
-                    unlockuser = browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]')
-                    unlockuser.click()
+                    browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]').click()
                     try:
                         unlockconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmUnlock"]')
                     except NoSuchElementException:
-                        print(clear)
-                        print("Only locked users can be unlocked!")
+                        clearall()
+                        print("Kontot är redan upplåst!")
+                        print("[Återgår till val av företag om 5 sekunder..]\n")
+                        print("Pulse Secure användarinlogg: " + customers.userUrl)
+                        time.sleep(5)
+                        clearall()
                         break
                     else:
                         unlockconfirm.click()
-                        print(clear)
-                        print("User unlocked!")
+                        clearall()
+                        print("Kontot har blivit upplåst!")
+                        print("[Återgår till val av företag om 5 sekunder..]\n")
+                        print("Pulse Secure användarinlogg: " + customers.userUrl)
+                        time.sleep(5)
+                        clearall()
                         break
 
-
+                ##Om user kör valet "reset", klickar på reset och printar godkännelse
                 elif unlockresetinput == "reset":
-                    resetuser = browser.find_element(By.XPATH, '//*[@id="btnReset_49"]')
-                    resetuser.click()
-                    resetconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]')
-                    resetconfirm.click()
-                    print(clear)
-                    print("Success! Account has been reset.")
+                    resetuser = browser.find_element(By.XPATH, '//*[@id="btnReset_49"]').click()
+                    resetconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]').click()
+                    clearall()
+                    print("Lyckat! Konto har blivit återställt.")
+                    print("[Återgår till val av företag om 5 sekunder..]\n")
+                    print("Pulse Secure användarinlogg: " + customers.userUrl)
+                    time.sleep(5)
+                    clearall()
                     break
 
             browser.close()
             reload(customers)
             VeryBeginning(myuser, mypass)
 
-        ###Om aktiv session redan finns klickar på continue
+        ##Om aktiv session redan finns klickar på continue
         def continueses():
-            btncheck = browser.find_element(By.NAME, 'btnContinue')
-            btncheck.click()
+            browser.find_element(By.NAME, 'btnContinue').click()
             checknewUI()
 
-        ###Byter till klassiska UI om det inte redan finns en aktiv session
+        ##Byter till klassiska UI om det inte redan finns en aktiv session
         def changefromnewUI():
-            newnavbar = browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/a')
-            newnavbar.click()
-            switchnewUI = browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/ul/li[3]/a')
-            switchnewUI.click()
+            browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/a').click()
+            browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/ul/li[3]/a').click()
             PostLogin()
 
-        ###Gör en check om nuvarande UI är nya eller klassiska
+        ##Gör en check om nuvarande UI är nya eller klassiska
         def checknewUI():
             try:
                 browser.find_element(By.XPATH, '//*[@id="navbartop_right"]/a')
@@ -175,13 +195,11 @@ if __name__ == '__main__':
                 changefromnewUI()
 
 
-        ###Skriver in user och pass samt loggar in på loginsidan
-        loginuser = browser.find_element(By.XPATH, '//*[@id="username"]')
-        loginpass = browser.find_element(By.XPATH, '//*[@id="password"]')
-        loginuser.send_keys(myuser)
-        loginpass.send_keys(mypass + Keys.ENTER)
+        ##Skriver in user och pass samt loggar in på loginsidan
+        browser.find_element(By.XPATH, '//*[@id="username"]').send_keys(myuser)
+        browser.find_element(By.XPATH, '//*[@id="password"]').send_keys(mypass + Keys.ENTER)
 
-        ###Gör check om det redan finns en aktiv session
+        ##Gör check om det redan finns en aktiv session
         try:
             browser.find_element(By.NAME, 'btnContinue')
         except NoSuchElementException:
@@ -190,5 +208,5 @@ if __name__ == '__main__':
             continueses()
 
 
-    LoginUser()
+    PulsePWCheck()
     
