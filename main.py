@@ -28,7 +28,7 @@ if __name__ == '__main__':
     ###alternativ för webdriver
     options = Options()
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
-    #options.add_argument('--headless')
+    options.add_argument('--headless')
     service = ChromeService(executable_path=ChromeDriverManager().install())
 
 ###PulsePWCheck gör ett inloggningsförsök i Pulse för Structor
