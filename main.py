@@ -67,6 +67,7 @@ if __name__ == '__main__':
             clearall()
             testlogin.close()
             PulsePWCheck()
+            #uwu
 
 
 ##VeryBeginning startar bara ny browser och tillåter skriptet att loopa
