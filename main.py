@@ -13,7 +13,7 @@ import time
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
-#Test för att pusha från lokal mapp till Github
+#Final_Github_test
 
 #Funktion för att tömma konsollen och printa programmets titel
 def clearall():
