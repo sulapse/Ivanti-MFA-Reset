@@ -1,0 +1,4 @@
+Kvar att göra
++Ändra MySQL user till read only
++Ändra MySQL user lösenord
++Implementera Autoupdate / version control version_check.py

@@ -1,4 +1,3 @@
-from turtle import clear
 from stdiomask import getpass
 from importlib import reload
 from selenium import webdriver
@@ -14,16 +13,17 @@ import time
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 
-#Test kommentar :D
+#Test för att pusha från lokal mapp till Github
 
 #Funktion för att tömma konsollen och printa programmets titel
 def clearall():
-    clear = lambda: os.system('cls' if os.name == 'nt' else 'clear')
-    clear()
+    clearcmd = lambda: os.system('cls' if os.name == 'nt' else 'clear')
+    clearcmd()
     print("<<< MFA Reset V1.0 >>>")
 
 #Vid start av skriptet stängs loggar av och definierar samt kör browser med options
 if __name__ == '__main__':
+    clearall()
     os.environ['WDM_LOG'] = str(logging.NOTSET)
     os.environ['WDM_LOG_LEVEL'] = '0'
     ###alternativ för webdriver
@@ -36,20 +36,21 @@ if __name__ == '__main__':
 ###Om inlogg lyckas hoppar skriptet vidare till VeryBeginning()
     def PulsePWCheck():
         clearall()
-        testlogin = webdriver.Chrome(service=service, options=options)
-        testlogin.get("https://ssl-structor.dcloud.se/admin")
-        print("[Skriv in dina admin uppgifter för Pulse Secure]")
         while True:
             clearall()
+            print("[Skriv in dina admin uppgifter för Pulse Secure]")
             myuser = input("Användarnamn: ")
             if myuser != '':
                 break
         while True:
             clearall()
+            print("[Skriv in dina admin uppgifter för Pulse Secure]")
             mypass = getpass("Lösenord: ")
             if mypass != '':
                 break
 
+        testlogin = webdriver.Chrome(service=service, options=options)
+        testlogin.get("https://ssl-structor.dcloud.se/admin")
         testlogin.find_element(By.XPATH, '//*[@id="username"]').send_keys(myuser)
         testlogin.find_element(By.XPATH, '//*[@id="password"]').send_keys(mypass + Keys.ENTER)
         try:
@@ -117,7 +118,7 @@ if __name__ == '__main__':
                     clearall()
                     print("Pulse Secure användarinlogg: " + customers.userUrl)
                     print("Användaren kan ej hittas, försök igen.")
-                    customer = prompt('Användarnamn?: ', completer=userlistcompleter)
+                    customer = prompt('Kundens användarnamn: ', completer=userlistcompleter)
                     if customer == '':
                         clearall()
                         browser.close()
@@ -129,13 +130,14 @@ if __name__ == '__main__':
 
             #Ger användaren valet att låsa upp eller återställa kontot som blivit valt
             print("Pulse Secure användarinlogg: " + customers.userUrl)
-            unlockresetcomplete = WordCompleter(['unlock', 'reset'])
+            unlockresetcomplete = WordCompleter(['unlock', 'reset', ''])
 
             #Loopar till användaren valt lås upp eller lås upp
             while True:
                 clearall()
                 print("Pulse Secure användarinlogg: " + customers.userUrl)
                 print("Vald användare:", customer)
+                print("\n[Lämna blankt och klicka ENTER för att återgå till val av användare]")
                 unlockresetinput = prompt('unlock / reset: ', completer=unlockresetcomplete)
                 if unlockresetinput == "unlock":
                     browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]').click()
@@ -144,36 +146,40 @@ if __name__ == '__main__':
                     except NoSuchElementException:
                         clearall()
                         print("Kontot är redan upplåst!")
-                        print("[Återgår till val av företag om 5 sekunder..]\n")
+                        print("[Klicka ENTER för att återgå till val av företag..]\n")
                         print("Pulse Secure användarinlogg: " + customers.userUrl)
-                        time.sleep(5)
+                        input("")
                         clearall()
                         break
                     else:
                         unlockconfirm.click()
                         clearall()
                         print("Kontot har blivit upplåst!")
-                        print("[Återgår till val av företag om 5 sekunder..]\n")
+                        print("[Klicka ENTER för att återgå till val av företag..]\n")
                         print("Pulse Secure användarinlogg: " + customers.userUrl)
-                        time.sleep(5)
+                        input("")
                         clearall()
                         break
 
                 ##Om user kör valet "reset", klickar på reset och printar godkännelse
                 elif unlockresetinput == "reset":
-                    resetuser = browser.find_element(By.XPATH, '//*[@id="btnReset_49"]').click()
-                    resetconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]').click()
+                    browser.find_element(By.XPATH, '//*[@id="btnReset_49"]').click()
+                    browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]').click()
                     clearall()
                     print("Lyckat! Konto har blivit återställt.")
-                    print("[Återgår till val av företag om 5 sekunder..]\n")
+                    print("[Klicka ENTER för att återgå till val av företag..]\n")
                     print("Pulse Secure användarinlogg: " + customers.userUrl)
-                    time.sleep(5)
+                    input("")
                     clearall()
                     break
+
+                elif unlockresetinput == "":
+                    PostLogin()
 
             browser.close()
             reload(customers)
             VeryBeginning(myuser, mypass)
+
 
         ##Om aktiv session redan finns klickar på continue
         def continueses():
@@ -210,4 +216,5 @@ if __name__ == '__main__':
 
 
     PulsePWCheck()
+
     
