@@ -1,4 +1,6 @@
 /venv/
+/build/
+/dist/
 /.idea/
 /login.txt
 /mykey.key

@@ -1,19 +1,4 @@
-from stdiomask import getpass
-from importlib import reload
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException
 import os
-import logging
-import time
-from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter
-
-#Final_Github_test
 
 #Funktion för att tömma konsollen och printa programmets titel
 def clearall():
@@ -23,6 +8,19 @@ def clearall():
 
 #Vid start av skriptet stängs loggar av och definierar samt kör browser med options
 if __name__ == '__main__':
+    from colorama import Fore, Back, Style
+    from stdiomask import getpass
+    from importlib import reload
+    from selenium import webdriver
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.chrome.options import Options
+    from selenium.common.exceptions import NoSuchElementException
+    import logging
+    from prompt_toolkit import prompt
+    from prompt_toolkit.completion import WordCompleter
     clearall()
     os.environ['WDM_LOG'] = str(logging.NOTSET)
     os.environ['WDM_LOG_LEVEL'] = '0'
@@ -38,13 +36,13 @@ if __name__ == '__main__':
         clearall()
         while True:
             clearall()
-            print("[Skriv in dina admin uppgifter för Pulse Secure]")
+            print("\n" + "[Skriv in dina admin uppgifter för Pulse Secure]")
             myuser = input("Användarnamn: ")
             if myuser != '':
                 break
         while True:
             clearall()
-            print("[Skriv in dina admin uppgifter för Pulse Secure]")
+            print("\n" + "[Skriv in dina admin uppgifter för Pulse Secure]")
             mypass = getpass("Lösenord: ")
             if mypass != '':
                 break
@@ -58,17 +56,15 @@ if __name__ == '__main__':
         except NoSuchElementException:
             if testlogin.current_url == "https://ssl-structor.dcloud.se/dana-admin/misc/dashboard.cgi" or testlogin.current_url == "https://ssl-structor.dcloud.se/dana-na/auth/url_admin/welcome.cgi?p=admin%2Dconfirm":
                 clearall()
-                print("[Inlogg OK]")
+                print("[Inlogg OK]" + "\n")
                 testlogin.close()
                 VeryBeginning(myuser, mypass)
             else:
                 clearall()
-                print("Fel användarnamn eller lösenord, försök igen.")
                 testlogin.close()
                 PulsePWCheck()
         else:
             clearall()
-            print("Fel användarnamn eller lösenord, försök igen.")
             testlogin.close()
             PulsePWCheck()
 
@@ -103,7 +99,7 @@ if __name__ == '__main__':
 
             # print(userslist)
             clearall()
-            print("Pulse Secure användarinlogg: " + customers.userUrl)
+            print("Pulse Secure användarinlogg: " + Fore.CYAN + customers.userUrl + Fore.WHITE + "\n")
             print("[Lämna användarnamn blankt och klicka ENTER för att återgå till välja företag]")
             userlistcompleter = WordCompleter(userslist)
             customer = prompt('Användarnamn?: ', completer=userlistcompleter)
@@ -116,7 +112,7 @@ if __name__ == '__main__':
             else:
                 while customer not in userslist:
                     clearall()
-                    print("Pulse Secure användarinlogg: " + customers.userUrl)
+                    print("Pulse Secure användarinlogg: " + Fore.CYAN + customers.userUrl + Fore.WHITE + "\n")
                     print("Användaren kan ej hittas, försök igen.")
                     customer = prompt('Kundens användarnamn: ', completer=userlistcompleter)
                     if customer == '':
@@ -129,15 +125,15 @@ if __name__ == '__main__':
             browser.find_element(By.XPATH, "//input[contains(@id,'{}')]".format(str(customer))).click()
 
             #Ger användaren valet att låsa upp eller återställa kontot som blivit valt
-            print("Pulse Secure användarinlogg: " + customers.userUrl)
+            print("Pulse Secure användarinlogg: " + Fore.CYAN + customers.userUrl + Fore.WHITE)
             unlockresetcomplete = WordCompleter(['unlock', 'reset', ''])
 
             #Loopar till användaren valt lås upp eller lås upp
             while True:
                 clearall()
-                print("Pulse Secure användarinlogg: " + customers.userUrl)
-                print("Vald användare:", customer)
-                print("\n[Lämna blankt och klicka ENTER för att återgå till val av användare]")
+                print("Pulse Secure användarinlogg: " + Fore.CYAN + customers.userUrl + Fore.WHITE)
+                print("Vald användare:" + Fore.LIGHTCYAN_EX, customer + Fore.WHITE + "\n")
+                print("[Lämna blankt och klicka ENTER för att återgå till val av användare]")
                 unlockresetinput = prompt('unlock / reset: ', completer=unlockresetcomplete)
                 if unlockresetinput == "unlock":
                     browser.find_element(By.XPATH, '//*[@id="btnUnlock_49"]').click()
@@ -145,18 +141,18 @@ if __name__ == '__main__':
                         unlockconfirm = browser.find_element(By.XPATH, '//*[@id="btnConfirmUnlock"]')
                     except NoSuchElementException:
                         clearall()
-                        print("Kontot är redan upplåst!")
-                        print("[Klicka ENTER för att återgå till val av företag..]\n")
-                        print("Pulse Secure användarinlogg: " + customers.userUrl)
+                        print("Pulse Secure användarinlogg: " + Fore.CYAN + customers.userUrl + Fore.WHITE)
+                        print("\n" + "Kontot är redan upplåst!")
+                        print("[Klicka ENTER för att återgå till val av företag..]")
                         input("")
                         clearall()
                         break
                     else:
                         unlockconfirm.click()
                         clearall()
-                        print("Kontot har blivit upplåst!")
-                        print("[Klicka ENTER för att återgå till val av företag..]\n")
-                        print("Pulse Secure användarinlogg: " + customers.userUrl)
+                        print("Pulse Secure användarinlogg: " + Fore.CYAN + customers.userUrl + Fore.WHITE)
+                        print("\n" + "Kontot har blivit upplåst..")
+                        print("[Klicka ENTER för att återgå till val av företag..]")
                         input("")
                         clearall()
                         break
@@ -166,9 +162,9 @@ if __name__ == '__main__':
                     browser.find_element(By.XPATH, '//*[@id="btnReset_49"]').click()
                     browser.find_element(By.XPATH, '//*[@id="btnConfirmReset"]').click()
                     clearall()
-                    print("Lyckat! Konto har blivit återställt.")
-                    print("[Klicka ENTER för att återgå till val av företag..]\n")
-                    print("Pulse Secure användarinlogg: " + customers.userUrl)
+                    print("Pulse Secure användarinlogg: " + Fore.CYAN + customers.userUrl + Fore.WHITE)
+                    print("\n" + "Konto har blivit återställt..")
+                    print("[Klicka ENTER för att återgå till val av företag..]")
                     input("")
                     clearall()
                     break

@@ -1,3 +1,11 @@
+TITLE - <<<Mfa Reset>>>
+INFO - Current URL is: name.local
+INFO1 - Klicka penis för att återgå
+-BLANK-
+CURRENT_TITLE - [Välj företag]
+INPUT - 
+
+
 Kvar att göra
 +Ändra MySQL user till read only
 +Ändra MySQL user lösenord
