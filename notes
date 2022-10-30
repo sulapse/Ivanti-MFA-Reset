@@ -7,10 +7,13 @@ INPUT -
 
 
 Kvar att göra
-+Ändra MySQL user till read only
-+Ändra MySQL user lösenord
-+Implementera Autoupdate / version control version_check.py
++Ändra MySQL user till read only - OK
++Ändra MySQL user lösenord - OK
++Implementera Autoupdate / version control version_check.py - OK
 
+Nästa todo:
+Autoinloggning genom att spara inloggningsuppgifter i en textfil
+Kryptera och dekryptera namn och lösenord
 
 ----------
 Vid uppdatering:
