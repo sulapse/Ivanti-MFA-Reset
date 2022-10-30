@@ -1,14 +1,31 @@
 import os
+currentVer = "1.0"
 
 #Funktion för att tömma konsollen och printa programmets titel
 def clearall():
     clearcmd = lambda: os.system('cls' if os.name == 'nt' else 'clear')
     clearcmd()
-    print("<<< MFA Reset V1.0 >>>")
+    print("<<< MFA Reset V" + currentVer + ">>>")
 
 #Vid start av skriptet stängs loggar av och definierar samt kör browser med options
 if __name__ == '__main__':
-    from colorama import Fore, Back, Style
+    clearall()
+    #Kontrollerar nuvarande version för programmet mot filen "version" i Github repository
+    import requests
+    token = "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"
+    headers = {'Authorization': 'bearer ' + token}
+    githubVer = requests.get('https://raw.githubusercontent.com/sulapse/mfa-reset/master/version', headers=headers).text.strip()
+
+    if githubVer == currentVer:
+        print("Du har senaste versionen!")
+    else:
+        print("Det finns en ny version tillgänglig - Din version: " + currentVer + ", Ny version: " + githubVer)
+        print("http://10.1.3.10/MFA_Reset.zip")
+        print("\n" + "[Eller klicka ENTER för att skippa denna versionen]")
+        input("")
+        
+
+    from colorama import Fore
     from stdiomask import getpass
     from importlib import reload
     from selenium import webdriver

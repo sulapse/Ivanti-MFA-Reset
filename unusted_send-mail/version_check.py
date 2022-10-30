@@ -12,7 +12,7 @@ os.environ['WDM_LOG_LEVEL'] = '0'
 service = ChromeService(executable_path=ChromeDriverManager().install())
 
 vercheck = webdriver.Chrome(service=service, options=options)
-vercheck.get("https://raw.githubusercontent.com/sulapse/test/main/version")
+vercheck.get("https://raw.githubusercontent.com/sulapse/mfa-reset/master/version?token=GHSAT0AAAAAAB2L3IE7L7LJEMWCNH6Y6XCKY25Y4SQ")
 version = vercheck.find_element(By.XPATH, '/html/body/pre')
 
 print(version.text)

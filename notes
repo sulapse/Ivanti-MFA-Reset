@@ -10,3 +10,7 @@ Kvar att göra
 +Ändra MySQL user till read only
 +Ändra MySQL user lösenord
 +Implementera Autoupdate / version control version_check.py
+
+
+----------
+Vid uppdatering, glöm inte uppdatera version i filen "Version", i alla prints i scriptet och i inno setup
