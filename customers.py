@@ -6,8 +6,8 @@ from main import clearall
 
 mydb = mysql.connector.connect(
     host="10.1.3.10",
-    user="kevin",
-    passwd="cody123",
+    user="python_script",
+    passwd="8l5)z_Da0VP)6n8M",
     database="mfa_reset"
 )
 
