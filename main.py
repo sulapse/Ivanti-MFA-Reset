@@ -1,17 +1,4 @@
 import os
-from colorama import Fore
-from stdiomask import getpass
-from importlib import reload
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException
-import logging
-from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter
 
 currentVer = "1.0"
 
@@ -23,6 +10,19 @@ def clearall():
 
 #Vid start av skriptet stängs loggar av och definierar samt kör browser med options
 if __name__ == '__main__':
+    from colorama import Fore
+    from stdiomask import getpass
+    from importlib import reload
+    from selenium import webdriver
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.chrome.options import Options
+    from selenium.common.exceptions import NoSuchElementException
+    import logging
+    from prompt_toolkit import prompt
+    from prompt_toolkit.completion import WordCompleter
     clearall()
     #Kontrollerar nuvarande version för programmet mot filen "version" i Github repository
     import requests
@@ -38,6 +38,8 @@ if __name__ == '__main__':
         print("\n" + "[Eller klicka ENTER för att skippa denna versionen]")
         input("")
     clearall()
+
+###Options för webbläsaren
     os.environ['WDM_LOG'] = str(logging.NOTSET)
     os.environ['WDM_LOG_LEVEL'] = '0'
     ###alternativ för webdriver
