@@ -1,5 +1,7 @@
+colorama==0.4.4
 mysql_connector_repackaged==0.3.1
 prompt_toolkit==3.0.30
-selenium==4.4.3
+requests==2.25.1
+selenium==4.5.0
 stdiomask==0.0.6
 webdriver_manager==3.8.3

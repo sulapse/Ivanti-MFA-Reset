@@ -1,1 +1,6 @@
 pyinstaller main.py --icon=ico.ico --onefile -n "main"
+
+
+Mac:
+cd /Volumes/personal/Mina filer/Development/Github/mfa-reset
+python3.11 -m PyInstaller --onefile -n "MFA Reset" main.py
