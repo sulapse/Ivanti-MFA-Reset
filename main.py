@@ -1,4 +1,5 @@
 import os
+import mysql.connector
 
 currentVer = "1.0"
 
@@ -24,6 +25,7 @@ if __name__ == '__main__':
     from prompt_toolkit import prompt
     from prompt_toolkit.completion import WordCompleter
     clearall()
+
     #Kontrollerar nuvarande version för programmet mot filen "version" i Github repository
     import requests
     token = "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"
@@ -51,6 +53,26 @@ if __name__ == '__main__':
 ###PulsePWCheck gör ett inloggningsförsök i Pulse för Structor
 ###Om inlogg lyckas hoppar skriptet vidare till VeryBeginning()
     def PulsePWCheck():
+
+        # Start en connection för att logga inloggningsförsök
+        # Används för att spåra vilka som använder MFA Reset med godkännande av Tom
+        try:
+            mydb = mysql.connector.connect(
+                host="10.1.3.10",
+                user="python_script",
+                passwd="8l5)z_Da0VP)6n8M",
+                database="mfa_reset"
+            )
+            mycursor = mydb.cursor()
+
+        # Om kontakt mot SQL inte fungerar så stängs programmet
+        except mysql.connector.Error:
+            print("Något gick fel, försök igen senare.")
+            print("[Klicka ENTER för att återgå till val av företag..]")
+            input("")
+            exit()
+
+
         clearall()
         while True:
             clearall()
@@ -65,10 +87,15 @@ if __name__ == '__main__':
             if mypass != '':
                 break
 
+        sql = """INSERT INTO user_log (user, inloggstatus) VALUES (%s, %s)"""
+        login_failed = (myuser, "failed")
+        login_success = (myuser, "success")
+
         testlogin = webdriver.Chrome(service=service, options=options)
         testlogin.get("https://ssl-structor.dcloud.se/admin")
         testlogin.find_element(By.XPATH, '//*[@id="username"]').send_keys(myuser)
         testlogin.find_element(By.XPATH, '//*[@id="password"]').send_keys(mypass + Keys.ENTER)
+
         try:
             testlogin.find_element(By.XPATH, '//*[@id="table_LoginPage_5"]/tbody/tr[1]/td')
         except NoSuchElementException:
@@ -76,14 +103,23 @@ if __name__ == '__main__':
                 clearall()
                 print("[Inlogg OK]" + "\n")
                 testlogin.close()
+                mycursor.execute(sql, login_success)
+                mydb.commit()
+                mycursor.close()
                 VeryBeginning(myuser, mypass)
             else:
                 clearall()
                 testlogin.close()
+                mycursor.execute(sql, login_failed)
+                mydb.commit()
+                mycursor.close()
                 PulsePWCheck()
         else:
             clearall()
             testlogin.close()
+            mycursor.execute(sql, login_failed)
+            mydb.commit()
+            mycursor.close()
             PulsePWCheck()
 
 
@@ -231,4 +267,3 @@ if __name__ == '__main__':
 
     PulsePWCheck()
 
-    

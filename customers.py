@@ -40,4 +40,4 @@ userUrl = admUrl[0].replace('/admin', '')
 
 
 
-mydb.close()
+mycursor.close()
