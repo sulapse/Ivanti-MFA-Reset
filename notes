@@ -5,11 +5,16 @@ INFO1 - Klicka penis för att återgå
 CURRENT_TITLE - [Välj företag]
 INPUT - 
 
+Att göra:
+Snabba upp for loopen som plockar listar alla användarna
+
+
 
 Kvar att göra
 +Ändra MySQL user till read only - OK
 +Ändra MySQL user lösenord - OK
 +Implementera Autoupdate / version control version_check.py - OK
++Logga inloggningar - OK
 
 Nästa todo:
 Autoinloggning genom att spara inloggningsuppgifter i en textfil
