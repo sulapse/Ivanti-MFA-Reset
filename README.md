@@ -1,4 +1,4 @@
-# mfa-reset
+# Ivanti Secure MFA Reset
 <br>
 Hello there!<br>
 Since the developers of Pulse / Ivanti Secure are crackheads and decided to make the admin panels unique for each customer I wrote this script to bring them together in to one place and automate the reset of MFA and account unlocks using Python and the Selenium framework.<br>
