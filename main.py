@@ -36,7 +36,7 @@ if __name__ == '__main__':
         print("Du har senaste versionen!")
     else:
         print("Det finns en ny version tillgänglig - Din version: " + currentVer + ", Ny version: " + githubVer)
-        print("http://10.1.3.10/MFA_Reset.zip")
+        print("URL to get latest version")
         print("\n" + "[Eller klicka ENTER för att skippa denna versionen]")
         input("")
     clearall()
