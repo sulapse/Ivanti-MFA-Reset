@@ -54,14 +54,13 @@ if __name__ == '__main__':
 ###Om inlogg lyckas hoppar skriptet vidare till VeryBeginning()
     def PulsePWCheck():
 
-        # Start en connection för att logga inloggningsförsök
-        # Används för att spåra vilka som använder MFA Reset med godkännande av Tom
+        # Start en connection mot databasen för att logga inloggningsförsök
         try:
             mydb = mysql.connector.connect(
-                host="10.1.3.10",
-                user="python_script",
-                passwd="8l5)z_Da0VP)6n8M",
-                database="mfa_reset"
+                host="DB_IP",
+                user="DB_USERNAME",
+                passwd="DB_PASSWORD",
+                database="DATABASE_NAME"
             )
             mycursor = mydb.cursor()
 
@@ -90,16 +89,17 @@ if __name__ == '__main__':
         sql = """INSERT INTO user_log (user, inloggstatus) VALUES (%s, %s)"""
         login_failed = (myuser, "failed")
         login_success = (myuser, "success")
-
+        #Checkar mot en av adminportalerna om inloggningsuppgifterna är korrekt
         testlogin = webdriver.Chrome(service=service, options=options)
-        testlogin.get("https://ssl-structor.dcloud.se/admin")
+        testlogin.get("https://PULSEURL/admin")
         testlogin.find_element(By.XPATH, '//*[@id="username"]').send_keys(myuser)
         testlogin.find_element(By.XPATH, '//*[@id="password"]').send_keys(mypass + Keys.ENTER)
 
         try:
             testlogin.find_element(By.XPATH, '//*[@id="table_LoginPage_5"]/tbody/tr[1]/td')
         except NoSuchElementException:
-            if testlogin.current_url == "https://ssl-structor.dcloud.se/dana-admin/misc/dashboard.cgi" or testlogin.current_url == "https://ssl-structor.dcloud.se/dana-na/auth/url_admin/welcome.cgi?p=admin%2Dconfirm":
+            #Checkar om Ivanti/Pulse secure är på nya eller gamla UI
+            if testlogin.current_url == "https://PULSEURL/dana-admin/misc/dashboard.cgi" or testlogin.current_url == "https://PULSEURL/dana-na/auth/url_admin/welcome.cgi?p=admin%2Dconfirm":
                 clearall()
                 print("[Inlogg OK]" + "\n")
                 testlogin.close()
@@ -129,7 +129,6 @@ if __name__ == '__main__':
     def VeryBeginning(myuser, mypass):
         import customers
         clearall()
-        print("Letar efter sågspån..")
         ###Väljer driver och öppnar webbläsare med url från customers.py
         browser = webdriver.Chrome(service=service, options=options)
         browser.get(customers.admUrl[0])
