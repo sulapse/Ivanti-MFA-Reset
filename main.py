@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     #Kontrollerar nuvarande version för programmet mot filen "version" i Github repository
     import requests
-    token = "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"
+    token = "GITHUB API TOKEN"
     headers = {'Authorization': 'bearer ' + token}
     githubVer = requests.get('https://raw.githubusercontent.com/sulapse/mfa-reset/master/version', headers=headers).text.strip()
 
